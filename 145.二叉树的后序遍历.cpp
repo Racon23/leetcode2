@@ -1,6 +1,7 @@
 // @before-stub-for-debug-begin
 #include <vector>
 #include <string>
+#include <stack>
 #include "commoncppproblem145.h"
 
 using namespace std;
@@ -29,25 +30,39 @@ class Solution
 {
     vector<int> vec;
 
-    void travelsal1(TreeNode *root)
-    {
-        if (root == nullptr)
-        {
-            return;
-        }
-        travelsal1(root->left);
-        travelsal1(root->right);
-        vec.push_back(root->val);
-    }
-
 public:
     vector<int> postorderTraversal(TreeNode *root)
     {
-        // vector<int> vec;
-        vec.clear();
-        // vec.push_back(root->val);
-        travelsal1(root);
+        TreeNode *node;
+        TreeNode *prev;
+        stack<TreeNode *> stk;
+        node = root;
+
+        while (node != nullptr || !stk.empty())
+        {
+            while (node != nullptr)
+            {
+                stk.emplace(node);
+                node = node->left;
+            }
+            node = stk.top();
+            stk.pop();
+
+            if (node->right == nullptr || node->right == prev)
+            {
+                vec.emplace_back(node->val);
+                prev = node;
+                node = nullptr;
+            }
+            else
+            {
+                stk.emplace(node);
+                node = node->right;
+            }
+        }
         return vec;
     }
 };
 // @lc code=end
+
+
