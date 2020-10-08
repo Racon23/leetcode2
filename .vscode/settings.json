@@ -4,5 +4,9 @@
     },
     "[cpp]": {
         "files.encoding": "utf8"
+    },
+    "files.associations": {
+        "vector": "cpp",
+        "stack": "cpp"
     }
 }
