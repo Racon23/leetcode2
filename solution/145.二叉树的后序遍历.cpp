@@ -25,56 +25,44 @@ using namespace std;
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
+
 class Solution
 {
     vector<int> vec;
-
-    void exeNode(TreeNode *node)
-    {
-        vec.push_back(node->val);
-    }
 
 public:
     vector<int> postorderTraversal(TreeNode *root)
     {
         TreeNode *node;
-        TreeNode *lnode;
+        TreeNode *prev;
         stack<TreeNode *> stk;
         node = root;
-        vec.clear();
-        // node = nullptr;
-        while (node)
+
+        while (node != nullptr || !stk.empty())
         {
-            while (node->left)
+            while (node != nullptr)
             {
                 stk.emplace(node);
                 node = node->left;
             }
-            if (node->right)
+            node = stk.top();
+            stk.pop();
+
+            if (node->right == nullptr || node->right == prev)
             {
-                //2 最左节点的右节点不空，继续找最底层最左
-                stk.push(node);
-                node = node->right;
+                vec.emplace_back(node->val);
+                prev = node;
+                node = nullptr;
             }
             else
             {
-                //3 空，抵达最底层最左
-                exeNode(node);
-                lnode = node;
-                node = stk.top();
-                //4 返回根
-                while (lnode == node->right)
-                {
-                    exeNode(node);
-                    stk.pop();
-                    lnode = node;
-                    node = stk.top();
-                }
-                if (node)
-                    node = node->right;
+                stk.emplace(node);
+                node = node->right;
             }
         }
         return vec;
     }
 };
 // @lc code=end
+
+
