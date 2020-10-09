@@ -1,6 +1,7 @@
 // @before-stub-for-debug-begin
 #include <vector>
 #include <string>
+#include <algorithm>
 #include <stack>
 #include "commoncppproblem145.h"
 
@@ -29,37 +30,52 @@ using namespace std;
 // moris解法
 class Solution
 {
-    vector<int> vec;
-
 public:
+    void addPath(vector<int> &vec, TreeNode *node)
+    {
+        int count = 0;
+        while (node != nullptr)
+        {
+            ++count;
+            vec.emplace_back(node->val);
+            node = node->right;
+        }
+        reverse(vec.end() - count, vec.end());
+    }
+
     vector<int> postorderTraversal(TreeNode *root)
     {
-        TreeNode *node, *prev;
-        stack<TreeNode *> stk;
-        node = root;
-        prev = nullptr;
-        while (node != nullptr || !stk.empty())
+        vector<int> res;
+        if (root == nullptr)
         {
-            while (node != nullptr)
-            {
-                stk.emplace(node);
-                node = node->left;
-            }
-            node = stk.top();
-            stk.pop();
-            if (node->right == nullptr || prev == node->right)
-            {
-                vec.emplace_back(node->val);
-                prev = node;
-                node = nullptr;
-            }
-            else
-            {
-                stk.emplace(node);
-                node = node->right;
-            }
+            return res;
         }
-        return vec;
+        TreeNode *p1 = root, *p2 = nullptr;
+        while (p1 != nullptr)
+        {
+            p2 = p1->left;
+            if (p2 != nullptr)
+            {
+                while (p2->right != nullptr && p2->right != p1)
+                {
+                    p2 = p2->right;
+                }
+                if (p2->right == nullptr)
+                {
+                    p2->right = p1;
+                    p1 = p1->left;
+                    continue;
+                }
+                else
+                {
+                    p2->right = nullptr;
+                    addPath(res, p1->left);
+                }
+            }
+            p1 = p1->right;
+        }
+        addPath(res, root);
+        return res;
     }
 };
 // @lc code=end
