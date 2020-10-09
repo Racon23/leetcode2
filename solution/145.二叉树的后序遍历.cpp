@@ -26,10 +26,6 @@ using namespace std;
  * };
  */
 
-<<<<<<< HEAD
-// moris解法
-=======
->>>>>>> 16c8fd6f65ebbde47d4add7a607baa775ef50c8e
 class Solution
 {
     vector<int> vec;
@@ -37,33 +33,6 @@ class Solution
 public:
     vector<int> postorderTraversal(TreeNode *root)
     {
-<<<<<<< HEAD
-        TreeNode *node, *prev;
-        stack<TreeNode *> stk;
-        node = root;
-        prev = nullptr;
-        while (node != nullptr || !stk.empty())
-        {
-            while (node != nullptr)
-            {
-                stk.emplace(node);
-                node = node->left;
-            }
-            node = stk.top();
-            stk.pop();
-            if (node->right == nullptr || prev == node->right)
-            {
-                vec.emplace_back(node->val);
-                prev = node;
-                node = nullptr;
-            }
-            else
-            {
-                stk.emplace(node);
-                node = node->right;
-            }
-        }
-=======
         TreeNode *prev;
         stack<TreeNode *> stk;
         prev = nullptr;
@@ -89,7 +58,6 @@ public:
             }
         }
 
->>>>>>> 16c8fd6f65ebbde47d4add7a607baa775ef50c8e
         return vec;
     }
 };
