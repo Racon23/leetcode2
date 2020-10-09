@@ -33,11 +33,10 @@ class Solution
 public:
     vector<int> postorderTraversal(TreeNode *root)
     {
-        TreeNode *node;
-        TreeNode *prev;
+        TreeNode *node, *prev;
         stack<TreeNode *> stk;
         node = root;
-
+        prev = nullptr;
         while (node != nullptr || !stk.empty())
         {
             while (node != nullptr)
@@ -47,8 +46,7 @@ public:
             }
             node = stk.top();
             stk.pop();
-
-            if (node->right == nullptr || node->right == prev)
+            if (node->right == nullptr || prev == node->right)
             {
                 vec.emplace_back(node->val);
                 prev = node;
@@ -64,5 +62,3 @@ public:
     }
 };
 // @lc code=end
-
-
