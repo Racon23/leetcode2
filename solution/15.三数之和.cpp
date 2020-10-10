@@ -48,26 +48,42 @@ class Solution
 public:
     vector<vector<int>> threeSum(vector<int> &nums)
     {
-        int a, b, c;
         int len = nums.size();
         int k = len - 1;
-        sort(nums.begin(), nums.end());
         vector<vector<int>> res;
-        for (int i = 0; i < len; i++)
+        sort(nums.begin(), nums.end());
+        for (int i = 0; i < len - 2; i++)
         {
-            a = nums[i];
-            for (int j = i + 1; j < len - 1; j++)
+            k = len - 1;
+            for (int j = i + 1; j < k; j++)
             {
-                b = nums[j];
-                k = len - 1;
                 while (k > j)
                 {
-                    if (a + b + nums[k] == 0)
+                    int sum = nums[i] + nums[j] + nums[k];
+                    if (sum < 0)
                     {
-                        res.push_back({a, b, c});
+                        break;
                     }
-                    k--;
+                    else if (sum == 0)
+                    {
+                        res.push_back({nums[i], nums[j], nums[k]});
+                        k--;
+                        break;
+                    }
+                    else
+                    {
+                        k--;
+                    }
                 }
+
+                while (j < k && nums[j] == nums[j + 1])
+                {
+                    j++;
+                }
+            }
+            while (i < len - 2 && nums[i] == nums[i + 1])
+            {
+                i++;
             }
         }
         return res;
