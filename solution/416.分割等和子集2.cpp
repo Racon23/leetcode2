@@ -14,7 +14,7 @@ using namespace std;
  * [416] 分割等和子集
  */
 
-// 二维数组
+// 一维数组
 // @lc code=start
 class Solution
 {
@@ -37,27 +37,20 @@ public:
         {
             return false;
         }
-        vector<vector<int>> dp(n, vector<int>(target + 1, 0));
-        for (int i = 0; i < n; i++)
-        {
-            dp[i][0] = 1;
-        }
-        dp[0][nums[0]] = 1;
+        // vector<vector<int>> dp(n, vector<int>(target + 1, 0));
+        vector<int> dp(target + 1, 0);
+
+        dp[0] = 1;
+        dp[nums[0]] = 1;
+
         for (int i = 1; i < n; i++)
         {
-            for (int j = 1; j < target + 1; j++)
+            for (int j = target; j >= nums[i]; j--)
             {
-                if (nums[i] > j)
-                {
-                    dp[i][j] = dp[i - 1][j];
-                }
-                else
-                {
-                    dp[i][j] = dp[i - 1][j] | dp[i - 1][j - nums[i]];
-                }
+                dp[j] = dp[j] | dp[j - nums[i]];
             }
         }
-        return dp[n - 1][target];
+        return dp[target];
     }
 };
 // @lc code=end
