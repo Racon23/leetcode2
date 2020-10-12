@@ -11,6 +11,9 @@
         "unordered_map": "cpp",
         "*.tcc": "cpp",
         "string": "cpp",
-        "string_view": "cpp"
+        "string_view": "cpp",
+        "algorithm": "cpp",
+        "istream": "cpp",
+        "limits": "cpp"
     }
 }
