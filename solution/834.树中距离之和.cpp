@@ -58,6 +58,7 @@ public:
     {
         vector<vector<int>> list(N);
 
+        // 制作遍历表
         for (int i = 0; i < edges.size(); i++)
         {
             // 横竖都加一遍
@@ -111,10 +112,35 @@ public:
 
         // 计算ans0
         vector<int> ans(N, 0);
-        int layer;
+        queue<int> q2;
+        int a2;
+        q1.emplace(0);
+        q2.emplace(0);
         while (!q1.empty())
         {
             // a1 = stk1.top();
+            a1 = q1.front();
+            q1.pop();
+            a2 = q2.front();
+            q2.pop();
+
+            len1 = list[a1].size();
+            for (int i = 0; i < len1; i++)
+            {
+                if (list[a1][i] == parents[a1])
+                {
+                    continue;
+                }
+                q1.emplace(list[a1][i]);
+                q2.emplace(a2 + 1);
+            }
+            ans[0] += a2;
+        }
+
+        q1.emplace(0);
+        // 计算其他ans
+        while (!q1.empty())
+        {
             a1 = q1.front();
             q1.pop();
 
@@ -126,86 +152,13 @@ public:
                     continue;
                 }
                 q1.emplace(list[a1][i]);
-                ans[0]+=count[list[a1][i]];
             }
+            if (a1 == 0)
+                continue;
+            ans[a1] = ans[parents[a1]] + N - count[a1] - count[a1];
         }
-
-
-        // while (!stk1.empty())
-        // {
-        //     a1 = stk1.top();
-
-        // }
-
-        // // 逆序制作节点数表
-        // vector<int> count(N, 0);
-        // for (int i = N - 1; i >= 0; i--)
-        // {
-        //     int len = list[i].size();
-        //     for (int j = 0; j < len; j++)
-        //     {
-        //         count[i] += count[list[i][j]];
-        //     }
-        //     count[i]++;
-        // }
-
-        vector<int> ans(N, 0);
-        // //计算ans0
-        // queue<int> qi;
-        // queue<int> ql;
-        // qi.emplace(0);
-        // ql.emplace(0);
-        // while (!qi.empty())
-        // {
-        //     int cur = qi.front();
-        //     qi.pop();
-        //     int layer = ql.front();
-        //     ql.pop();
-        //     ans[0] += layer;
-        //     int len = list[cur].size();
-        //     for (int i = 0; i < len; i++)
-        //     {
-        //         qi.emplace(list[cur][i]);
-        //         ql.emplace(layer + 1);
-        //     }
-        // }
-        // qi.emplace(0);
-        // ql.emplace(0);
-        // // qi存当前节点，ql存父节点
-        // // 计算其他ans
-        // while (!qi.empty())
-        // {
-        //     int cur = qi.front();
-        //     int prev = ql.front();
-        //     ql.pop();
-        //     qi.pop();
-        //     int len = list[cur].size();
-        //     for (int i = 0; i < len; i++)
-        //     {
-        //         qi.emplace(list[cur][i]);
-        //         ql.emplace(cur);
-        //     }
-        //     if (cur == 0)
-        //     {
-        //         continue;
-        //     }
-        //     else
-        //     {
-        //         ans[cur] = ans[prev] + N - count[cur] - count[cur];
-        //     }
-        // }
 
         return ans;
     }
-
-    //     // 求ans0
-    //     void dfs1(vector<int> &ans, int cur)
-    //     {
-    //     }
-
-    //     // 求其他ans
-    //     void dfs2(vector<int> &ans, int cur)
-    //     {
-    //     }
 };
 // @lc code=end
