@@ -1,2 +1,4 @@
-["bella","label","roller"]
-["cool","lock","cook"]
+""aA"
+"aAAbbbb"
+"z"
+"ZZ"
