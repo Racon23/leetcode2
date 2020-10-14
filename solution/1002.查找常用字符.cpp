@@ -1,3 +1,13 @@
+// @before-stub-for-debug-begin
+#include <vector>
+#include <string>
+#include <unordered_map>
+#include <algorithm>
+#include "commoncppproblem1002.h"
+
+using namespace std;
+// @before-stub-for-debug-end
+
 /*
  * @lc app=leetcode.cn id=1002 lang=cpp
  *
@@ -45,11 +55,48 @@
  */
 
 // @lc code=start
-class Solution {
+class Solution
+{
 public:
-    vector<string> commonChars(vector<string>& A) {
+    vector<string> commonChars(vector<string> &A)
+    {
+        int len = A.size();
+        vector<unordered_map<char, int>> maps(len);
+        vector<string> res;
+        for (int i = 0; i < len; i++)
+        {
+            for (char c : A[i])
+            {
+                auto iter = maps[i].find(c);
+                if (iter == maps[i].end())
+                {
+                    maps[i].insert(pair<char, int>(c, 1));
+                }
+                else
+                {
+                    iter->second++;
+                }
+            }
+        }
+        int count;
+        char cc;
+        auto iter = maps[0].begin();
+        while (iter != maps[0].end())
+        {
+            cc = iter->first;
+            count = iter->second;
+            for (int j = 1; j < len; j++)
+            {
+                count = min(count, maps[j][cc]);
+            }
+            for (int k = 0; k < count; k++)
+            {
+                res.emplace_back(1,cc);
+            }
+            iter++;
+        }
 
+        return res;
     }
 };
 // @lc code=end
-
