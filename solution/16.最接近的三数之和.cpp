@@ -22,11 +22,13 @@ public:
         int n = nums.size();
         int k;
         int sum;
-        int last=INT_MAX;
+        int last;
+        sort(nums.begin(),nums.end());
+        last = nums[0]+nums[1]+nums[n-1];
         for (int i = 0; i <= n - 3; i++)
         {
             k = n - 1;
-            for (int j = 1; j <= n - 2; j++)
+            for (int j = i + 1; j <= n - 2; j++)
             {
                 while (j < k)
                 {
@@ -46,7 +48,7 @@ public:
                         break;
                     }
                 }
-                while (j < k && nums[j] == nums[i + j])
+                while (j < k && nums[j] == nums[j + 1])
                 {
                     j++;
                 }
