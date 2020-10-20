@@ -15,6 +15,7 @@
         "algorithm": "cpp",
         "istream": "cpp",
         "limits": "cpp",
-        "array": "cpp"
+        "array": "cpp",
+        "unordered_set": "cpp"
     }
 }
