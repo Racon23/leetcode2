@@ -59,27 +59,50 @@ using namespace std;
  *     ListNode(int x, ListNode *next) : val(x), next(next) {}
  * };
  */
-class Solution {
+class Solution
+{
 public:
-    ListNode* reverseKGroup(ListNode* head, int k) {
-        ListNode *hair,cur,pre,forlink;
-        hair->next = head;
-        cur = 
-        pre = head;
-        forlink = pre;
-        int count=0;
-        while(cur){
-            
-            if(count==k-1){
-                
-            }
+    ListNode *reverseKGroup(ListNode *head, int k)
+    {
 
+        ListNode *scout = head;
+        ListNode *hair = new ListNode(-1);
+        hair->next = head;
+        ListNode *perhead = hair;
+        ListNode *pre, *cur, *post;
+
+        while (scout)
+        {
+            // 确定剩余节点不小于k
+            cur = scout;
+            int count = k - 1;
+            while (scout && count > 0)
+            {
+                scout = scout->next;
+                count--;
+            }
+            if (!scout)
+            {
+                break;
+            }
+            perhead->next = scout;
+            scout = scout->next;
+            perhead = cur;
+            pre = nullptr;
+            count = k;
+            // 翻转
+            while (count > 0)
+            {
+                post = cur->next;
+                cur->next = pre;
+                pre = cur;
+                cur = post;
+                count--;
+            }
+            perhead->next = scout;
         }
 
-
-
-        return head;
+        return hair->next;
     }
 };
 // @lc code=end
-
