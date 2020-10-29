@@ -30,15 +30,13 @@ public:
     int sumNumbers(TreeNode *root)
     {
         TreeNode *p1 = root, *p2, *p3;
-        vector<int> arr;
-        int res = 0;
-        int cur = 0;
-        int prev = 0;
-        int count = 0;
+        int res = 0;//结果
+        int cur = 0;//当前的数
+        int prev = 0;//记录遍历p2的前缀，回到根时要减掉
+        int count = 0;//记录连接时遍历过的p2节点数
         while (p1)
         {
             p2 = p1->left;
-            // prev = 0;
             if (p2)
             {
                 prev = 0;
@@ -54,11 +52,13 @@ public:
                 if (p2->right)
                 {
                     // 抵达最左节点，并且回到根
-                    // cur = cur * 10 + p3->val;
-
-                    res += cur;
+                    // p1可能是叶子节点右移抵达的
+                    // 如果p3左子树空，证明左右子树都空，所以是叶子
+                    if (p3 && !p3->left)
+                        res += cur;
                     cur = (cur - prev) / pow(10, count);
                     p2->right = nullptr;
+                    p3 = p1;
                     p1 = p1->right;
                 }
                 else
@@ -72,14 +72,15 @@ public:
             else
             {
                 // 最左节点
+                // 如果是叶子，下一步后，回到根，可知p3右节点空，此时判断p3左节点空，为叶子
+                // 如果不是叶子，会抵达右子节点，然后连接根。
                 cur = cur * 10 + p1->val;
-                // res += cur;
                 p3 = p1;
-                // cur = (cur - p1->val) / 10;
                 p1 = p1->right;
             }
         }
-        if (p3&&p3->left && p3->right)
+        // 补充最底最右节点
+        if (p3 && !p3->left)
             res += cur;
 
         return res;
