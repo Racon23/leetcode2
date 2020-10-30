@@ -68,12 +68,26 @@ public:
         if (divisor == -1)
             return dividend == INT_MIN ? INT_MAX : -dividend;
         int flag = dividend > 0 && divisor > 0 || dividend < 0 && divisor < 0 ? 1 : -1;
-        // 先减掉1，方便运算，后面再加上
-        dividend<0?-dividend-1;
+        dividend = dividend > 0 ? -dividend : dividend;
+        divisor = divisor > 0 ? -divisor : divisor;
+        int res;
+        res = div(dividend, divisor);
+        return flag == 1 ? res : -res;
     }
     int div(int a, int b)
     {
-
+        int k = b;
+        int count = 1;
+        if (a == 0 || a > b)
+        {
+            return 0;
+        }
+        while (INT_MIN - k <= k && a - k <= k)
+        {
+            k += k;
+            count += count;
+        }
+        return count + div(a - k, b);
     }
 };
 // @lc code=end
