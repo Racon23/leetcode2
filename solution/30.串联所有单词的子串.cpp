@@ -14,6 +14,7 @@ using namespace std;
  */
 
 // @lc code=start
+// 优化1
 class Solution
 {
 public:
