@@ -62,7 +62,7 @@ public:
                 }
                 if (flag == 0)
                 {
-                    res.emplace_back(i);
+                    res.emplace_back(i+k);
                 }
                 hm2[s.substr(i + k , wl)]--;
             }
