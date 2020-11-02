@@ -10,3 +10,5 @@
 ["",""]
 "lingmindraboofooowingdingbarrwingmonkeypoundcake"
 ["fooo","barr","wing","ding","wing"]
+"barfoofoobarthefoobarman"
+["bar","foo","the"]

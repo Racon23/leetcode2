@@ -48,18 +48,22 @@ public:
         {
             vc1.clear();
             hm2.clear();
-            sc = (m - k) / wl;
-            int i = 0;
-            int last = 0;
+            sc = (m - k) / wl; //计算主串单词总数
+            int i = 0;         //遍历下标
+            int last = 0;      //记录滑动窗口起点
+            int last2 = -1;     // 记录上次滑动窗口终点
             for (int j = 0; j < sc; j++)
             {
                 vc1.emplace_back(s.substr(k + j * wl, wl));
             }
+
+
             while (last <= sc - wc)
             {
                 int i = last + wc - 1;
                 flag = 0;
-                while (i >= last)
+                // last2之前都是匹配过的,last是起点
+                while (i >= last&&i>last2)
                 {
                     if (hm1.find(vc1[i]) == hm1.end())
                     {
@@ -67,10 +71,10 @@ public:
                     }
                     i--;
                 }
-                if (last - 1 == i)
+                if (last2 == i)
                 {
                     // hm数单词
-                    for (int j = i + 1; j <= last + wc - 1; j++)
+                    for (int j = last2 + 1; j <= last + wc - 1; j++)
                     {
                         hm2[vc1[j]]++;
                     }
@@ -88,14 +92,19 @@ public:
                         res.emplace_back(k + last * wl);
                     }
                     hm2[vc1[last]]--;
+                    last2 = last + wc - 1;
                     last++;
                 }
                 else
                 {
-                    for (int j = last; j <= i + 1; j++)
+                    for (int j = last; j <= last2; j++)
                     {
                         hm2[vc1[j]]--;
                     }
+                    for(int j=i+1;j<=last+wc-1;j++){
+                        hm2[vc1[j]]++;
+                    }
+                    last2 = last + wc - 1;
                     last = i + 1;
                 }
             }
