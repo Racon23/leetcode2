@@ -1,6 +1,8 @@
 // @before-stub-for-debug-begin
 #include <vector>
 #include <string>
+#include <unordered_set>
+#include <algorithm>
 #include "commoncppproblem139.h"
 
 using namespace std;
@@ -18,34 +20,33 @@ class Solution
 public:
     bool wordBreak(string s, vector<string> &wordDict)
     {
-        int len = s.size();
-        vector<bool> dp(len,false);
-        dp[0]=true;
-        int wc = wordDict.size();
-        for(int i=0;i<len;i++){
-            for(int j=0;j<wc;j++){
-                
-            }
-        }
-        return dfs(0, s, wordDict);
-    }
-
-    // s位置,
-    bool dfs(int pos, string s, vector<string> &wordDict)
-    {
-        if (pos == s.size())
-            return true;
-        bool flag;
-        for (auto &it : wordDict)
+        int n = s.size();
+        int maxw = 0;
+        vector<bool> dp(n + 1, false);
+        unordered_set<string> wdset;
+        // for (auto &it : wordDict)
+        for (int i = 0; i < wordDict.size(); i++)
         {
-            if (it == s.substr(pos, it.size()))
+            maxw = maxw > wordDict[i].size() ? maxw : wordDict[i].size();
+            // if (maxw < wordDict[i].length())
+            // {
+            //     maxw = wordDict[i].length();
+            // }
+            // maxw = max(maxw,wordDict[i].size());
+            wdset.emplace(wordDict[i]);
+        }
+        dp[0] = true;
+        for (int i = 1; i <= n; i++)
+        {
+            for (int j = i - 1; j >= 0 && j >= i - maxw; j--)
             {
-                flag = dfs(pos + it.size(), s, wordDict);
-                if (flag == true)
-                    return true;
+                if (dp[j] && wdset.find(s.substr(j, i - j)) != wdset.end())
+                {
+                    dp[i] = true;
+                }
             }
         }
-        return false;
+        return dp[n];
     }
 };
 // @lc code=end
