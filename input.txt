@@ -1,10 +1,4 @@
-"catsanddog"
-["cat", "cats", "and", "sand", "dog"]
-"pineapplepenapple"
-["apple", "pen", "applepen", "pine", "pineapple"]
-"catsandog"
-["cats", "dog", "sand", "and", "cat"]
-"leetcode"
-["leet","code"]
-"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaab"
-["a","aa","aaa","aaaa","aaaaa","aaaaaa","aaaaaaa","aaaaaaaa","aaaaaaaaa","aaaaaaaaaa"]
+[[1,3],[6,9]]
+[2,5]
+[[1,2],[3,5],[6,7],[8,10],[12,16]]
+[4,8]
