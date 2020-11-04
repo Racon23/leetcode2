@@ -31,18 +31,18 @@ public:
         }
         vector<string> res;
         vector<vector<string>> rem(n + 1); // 记录i之后的单词的组合
-        vector<int> flags(n + 1, 2);       // 0 false 1 true 2 non-check
+        vector<int> flags(n + 1, 0);       // 0 false 1 true 2 non-check
         dfs(s, 0, wdset, "", res, maxn, n, rem, flags);
         return rem[0];
     }
 
     void dfs(string &s, int st, unordered_set<string> &wdset, string str, vector<string> &res, int maxn, int n, vector<vector<string>> &rem, vector<int> &flags)
     {
+        flags[st] = 1;
         if (st == s.size())
         {
             // 去掉空格
             // res.emplace_back(str.substr(0, str.size() - 1));
-            flags[st] = 1;
             return;
         }
 
@@ -53,29 +53,25 @@ public:
             {
                 // string rem = str;
                 // str += tmp + " ";
-                if (flags[st + i] == 2)
+                if (flags[st + i] == 0)
                 {
                     dfs(s, st + i, wdset, str, res, maxn, n, rem, flags);
                 }
-                if (flags[st + i] == 1)
+                if (st + i == s.size())
                 {
-                    if (st + i == s.size())
+                    rem[st].emplace_back(tmp);
+                }
+                else
+                {
+                    // 已经遍历过
+                    for (auto &it : rem[st + i])
                     {
-                        rem[st].emplace_back(tmp);
-                    }
-                    else
-                    {
-                        // 已经遍历过，是匹配的
-                        for (auto &it : rem[st + i])
-                        {
-                            // rem[st].emplace_back(tmp + " " + it);
-                            rem[st].emplace_back(tmp + " " + it);
-                        }
+                        // rem[st].emplace_back(tmp + " " + it);
+                        rem[st].emplace_back(tmp + " " + it);
                     }
                 }
             }
         }
-        // flags[st] = flags[st] == 2 ? 0 : flags[st];
         return;
     }
 };
