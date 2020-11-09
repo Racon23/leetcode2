@@ -22,11 +22,12 @@ public:
     {
         int count = 0;
         int n = wordList.size();
-        unordered_set<string> visited;
+        // unordered_set<string> visited;
+        vector<bool> visited(n, false);
         queue<string> q;
         int len;
         q.emplace(beginWord);
-        visited.emplace(beginWord);
+        // visited.emplace(beginWord);
         len = q.size();
         while (len > 0)
         {
@@ -35,22 +36,24 @@ public:
             {
                 string s = q.front();
                 q.pop();
-                for (auto &it : wordList)
+                for (int j = 0; j < n; j++)
                 {
-                    if (visited.find(it) != visited.end())
+                    // if (visited.find(wordList[j]) != visited.end())
+                    if (visited[j])
                     {
                         continue;
                     }
-                    if (!canConvert(s, it))
+                    if (!canConvert(s, wordList[j]))
                     {
                         continue;
                     }
-                    if (endWord == it)
+                    if (endWord == wordList[j])
                     {
                         return count + 1;
                     }
-                    q.emplace(it);
-                    visited.emplace(it);
+                    q.emplace(wordList[j]);
+                    // visited.emplace(it);
+                    visited[j] = true;
                 }
             }
             len = q.size();
