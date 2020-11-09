@@ -3,6 +3,7 @@
 #include <string>
 #include <unordered_set>
 #include <queue>
+#include <bits/stdc++.h>
 #include "commoncppproblem127.h"
 
 using namespace std;
@@ -34,8 +35,8 @@ public:
         {
             if (wordList[i] == endWord)
             {
-                q2.emplace(i);
-                visited2.emplace(i);
+                q2.emplace(endWord);
+                visited2.emplace(endWord);
             }
         }
         if (q2.empty())
@@ -43,8 +44,8 @@ public:
             return 0;
         }
         wordList.emplace_back(beginWord);
-        q1.emplace(n);
-        visited1.emplace(n);
+        q1.emplace(beginWord);
+        visited1.emplace(beginWord);
         len1 = q1.size();
         len2 = q2.size();
         int count = 0;
@@ -60,40 +61,42 @@ public:
             count++;
             if (len1 > len2)
             {
-                queue<int> temp = q2;
+                queue<string> temp = q2;
                 q2 = q1;
                 q1 = temp;
                 len1 = len2;
                 len2 = q2.size();
-                unordered_set<int> tv = visited2;
+                unordered_set<string> tv = visited2;
                 visited2 = visited1;
                 visited1 = tv;
             }
             for (int i = 0; i < len1; i++)
             {
-                string s = wordList[q1.front()];
+                string s = q1.front();
                 q1.pop();
                 for (int j = 0; j < m; j++)
                 {
-                    char tc = s[j];
+                    char cs[m + 1];
+                    strcpy(cs, s.data());
+                    string ts;
                     for (char c = 'a'; c <= 'z'; c++)
                     {
-                        s[j] = c;
-                        if (visited1.find(s) != visited1.end())
+                        cs[j]=c;
+                        ts = cs;
+                        if (visited1.find(ts) != visited1.end())
                         {
                             continue;
                         }
-                        if (visited2.find(s) != visited2.end())
+                        if (visited2.find(ts) != visited2.end())
                         {
                             return count + 1;
                         }
-                        if (wdset.find(s))
+                        if (wdset.find(ts) != wdset.end())
                         {
-                            q1.emplace(s);
-                            visited1.emplace(s);
+                            q1.emplace(ts);
+                            visited1.emplace(ts);
                         }
                     }
-                    s[j] = tc;
                 }
             }
             len1 = q1.size();
@@ -101,6 +104,5 @@ public:
         }
         return 0;
     }
-
 };
 // @lc code=end
