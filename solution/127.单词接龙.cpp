@@ -16,16 +16,18 @@ using namespace std;
 
 // @lc code=start
 // double bfs
+// 可变单词遍历
 class Solution
 {
 public:
     int ladderLength(string beginWord, string endWord, vector<string> &wordList)
     {
         int n = wordList.size();
-        unordered_set<int> visited1;
-        unordered_set<int> visited2;
-        queue<int> q1; // 正向bfs
-        queue<int> q2; // 反向bfs
+        int m = beginWord.size();
+        unordered_set<string> visited1;
+        unordered_set<string> visited2;
+        queue<string> q1; // 正向bfs
+        queue<string> q2; // 反向bfs
         int len1;
         int len2;
         for (int i = 0; i < n; i++)
@@ -46,6 +48,13 @@ public:
         len1 = q1.size();
         len2 = q2.size();
         int count = 0;
+
+        // 单词列表转换为字典
+        unordered_set<string> wdset;
+        for (auto &it : wordList)
+        {
+            wdset.emplace(it);
+        }
         while (len1 > 0 && len2 > 0)
         {
             count++;
@@ -64,22 +73,27 @@ public:
             {
                 string s = wordList[q1.front()];
                 q1.pop();
-                for (int j = 0; j < n; j++)
+                for (int j = 0; j < m; j++)
                 {
-                    if (visited1.find(j) != visited1.end())
+                    char tc = s[j];
+                    for (char c = 'a'; c <= 'z'; c++)
                     {
-                        continue;
+                        s[j] = c;
+                        if (visited1.find(s) != visited1.end())
+                        {
+                            continue;
+                        }
+                        if (visited2.find(s) != visited2.end())
+                        {
+                            return count + 1;
+                        }
+                        if (wdset.find(s))
+                        {
+                            q1.emplace(s);
+                            visited1.emplace(s);
+                        }
                     }
-                    if (!canConvert(s, wordList[j]))
-                    {
-                        continue;
-                    }
-                    if (visited2.find(j) != visited2.end())
-                    {
-                        return count + 1;
-                    }
-                    q1.emplace(j);
-                    visited1.emplace(j);
+                    s[j] = tc;
                 }
             }
             len1 = q1.size();
@@ -88,19 +102,5 @@ public:
         return 0;
     }
 
-    bool canConvert(string s1, string s2)
-    {
-        // if (s1.length() != s2.length())
-        //     return false;
-        int count = 0;
-        for (int i = 0; i < s1.length(); i++)
-        {
-            if (s1[i] != s2[i])
-            {
-                count++;
-            }
-        }
-        return count == 1;
-    }
 };
 // @lc code=end
