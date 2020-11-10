@@ -45,16 +45,20 @@ public:
         int i = n - 1;
         while (i >= 1)
         {
+            // 找到顶点
             if (nums[i] > nums[i - 1])
             {
                 int j = i;
+                // 找到比它大一点的点
                 while (j < n && nums[j] > nums[i - 1])
                 {
                     j++;
                 }
+                // 交换
                 int temp = nums[i - 1];
                 nums[i - 1] = nums[j - 1];
                 nums[j - 1] = temp;
+                // 倒序
                 reverse(nums.begin() + i, nums.end());
                 break;
             }
