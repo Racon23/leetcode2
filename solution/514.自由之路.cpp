@@ -1,12 +1,12 @@
 // @before-stub-for-debug-begin
 #include <vector>
 #include <string>
+#include <unordered_map>
+#include <queue>
 #include "commoncppproblem514.h"
 
 using namespace std;
 // @before-stub-for-debug-end
-
-#include <unordered_map>
 
 /*
  * @lc app=leetcode.cn id=514 lang=cpp
@@ -15,6 +15,7 @@ using namespace std;
  */
 
 // @lc code=start
+// 动态规划 二维
 class Solution
 {
 public:
@@ -24,39 +25,31 @@ public:
         int m = key.size();
         int ret = 0;
         unordered_map<char, vector<int>> ringmap;
-        int mindist = 0;
         // 制作字典
         for (int i = 0; i < n; i++)
         {
             ringmap[ring[i]].push_back(i);
         }
-        int prev = 0;
-        int prev2 = 0;
-        int min2 = 0;
-        for (int i = 0; i < m; i++)
+
+        vector<vector<int>> dp(m, vector<int>(n, INT_MAX));
+
+        for (auto &i : ringmap[key[0]])
         {
-            mindist = INT_MAX;
-            // ringmap[ring[i]].push_back(i);
-            vector<int> vec = ringmap[key[i]];
-            for (int j = 0; j < vec.size(); j++)
+            dp[0][i] = min(i, n - i) + 1;
+        }
+
+        for (int i = 1; i < m; i++)
+        {
+            for (auto &j : ringmap[key[i]])
             {
-                if (vec[j] < prev)
+                for (auto &k : ringmap[key[i - 1]])
                 {
-                    mindist = min(mindist, min(prev - vec[j], n + vec[j] - prev));
-                }
-                else if (vec[j] > prev)
-                {
-                    mindist = min(mindist, min(vec[j] - prev, n + prev - vec[j]));
-                }
-                else
-                {
-                    mindist = 0;
+                    dp[i][j] = min(dp[i][j], dp[i - 1][k] + min(abs(j - k), n - abs(j - k)) + 1);
                 }
             }
-            
-            ret++;
         }
-        return ret;
+
+        return *min_element(dp[m - 1].begin(), dp[m - 1].end());
     }
 };
 // @lc code=end
