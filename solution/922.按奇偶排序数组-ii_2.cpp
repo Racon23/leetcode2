@@ -13,27 +13,23 @@ using namespace std;
  */
 
 // @lc code=start
+// 双指针
 class Solution
 {
 public:
     vector<int> sortArrayByParityII(vector<int> &A)
     {
         int n = A.size();
-        int i = 0, j = 0;
-        while (j < n)
-        {
-            if(i==j&&A[j]%2==i%2) {
+        int i = 0, j = 1;
+        while(i<n){
+            if(A[i]%2==1){
+                while(A[j]%2==1){
+                    j+=2;
+                }
                 swap(A[i],A[j]);
-                i++;j++;
-            }else if(i<j&&A[j]%2==i%2){
-                swap(A[i],A[j]);
-                i+=2;
-                j=j<i?i:j;
-            }else{
-                j++;
             }
+            i+=2;
         }
-
         return A;
     }
 };
