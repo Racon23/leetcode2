@@ -1,9 +1,10 @@
-#include <queue>
-#include <vector>
-#include <stack>
+/*
+ * @lc app=leetcode.cn id=402 lang=cpp
+ *
+ * [402] 移掉K位数字
+ */
 
-using namespace std;
-
+// @lc code=start
 class Solution
 {
 public:
@@ -44,3 +45,5 @@ public:
         return ret;
     }
 };
+// @lc code=end
+
