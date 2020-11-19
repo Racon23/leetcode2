@@ -14,14 +14,22 @@ using namespace std;
  */
 
 // @lc code=start
+// 位运算
 class Solution
 {
 public:
-    bool row[9][9];
-    bool col[9][9];
-    bool box[3][3][9];
+    int row[9];
+    int col[9][9];
+    int box[3][3][9];
     vector<pair<int, int>> spaces; // 记录空格位
     bool valid;
+    
+    void flip(int i, int j, int digit)
+    {
+        row[i] ^= (1 << digit);
+        col[j] ^= (1 << digit);
+        box[i / 3][j / 3] ^= (1 << digit);
+    }
 
     void dfs(vector<vector<char>> &board, int pos)
     {
@@ -31,23 +39,24 @@ public:
             return;
         }
         auto [i, j] = spaces[pos];
-        for (int digit = 0; digit < 9 && !valid; digit++)
+        int mask = ~(row[i] | col[j] | box[i / 3][j / 3]) & 0x1FF;
+        for (; mask && !valid; mask &= (mask - 1))
         {
-            if (!row[i][digit] && !col[j][digit] && !box[i / 3][j / 3][digit])
-            {
-                row[i][digit] = col[j][digit] = box[i / 3][j / 3][digit] = true;
-                board[i][j] = digit + '0' + 1;
-                dfs(board, pos + 1);
-                row[i][digit] = col[j][digit] = box[i / 3][j / 3][digit] = false;
-            }
+            int digitMask = mask & (-mask);
+            int digit = __builtin_ctz(digitMask);
+            flip(i, j, digit);
+            board[i][j] = digit + '0' + 1;
+            dfs(board, pos + 1);
+            // 为什么要恢复，mask已经负责迭代了，辅助数组没有这个作用，而且不恢复会影响下一次递归
+            flip(i, j, digit);
         }
     }
 
     void solveSudoku(vector<vector<char>> &board)
     {
-        memset(row, false, sizeof(row));
-        memset(col, false, sizeof(col));
-        memset(box, false, sizeof(box));
+        memset(row, 0, sizeof(row));
+        memset(col, 0, sizeof(col));
+        memset(box, 0, sizeof(box));
         valid = false;
 
         // 先填充三个辅助数组
@@ -62,7 +71,7 @@ public:
                 else
                 {
                     int digit = board[i][j] - '0' - 1;
-                    row[i][digit] = col[j][digit] = box[i / 3][j / 3][digit] = true;
+                    flip(i, j, digit);
                 }
             }
         }
