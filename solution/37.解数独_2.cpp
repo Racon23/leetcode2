@@ -19,8 +19,8 @@ class Solution
 {
 public:
     int row[9];
-    int col[9][9];
-    int box[3][3][9];
+    int col[9];
+    int box[3][3];
     vector<pair<int, int>> spaces; // 记录空格位
     bool valid;
     
@@ -43,7 +43,7 @@ public:
         for (; mask && !valid; mask &= (mask - 1))
         {
             int digitMask = mask & (-mask);
-            int digit = __builtin_ctz(digitMask);
+            int digit = __builtin_ctz(digitMask); //返回末尾0的个数
             flip(i, j, digit);
             board[i][j] = digit + '0' + 1;
             dfs(board, pos + 1);
