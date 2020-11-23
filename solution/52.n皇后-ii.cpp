@@ -78,7 +78,9 @@ public:
         // 循环的是行位置
         while (availablePosition != 0)
         {
+            // 获取最后一个1，负数是补码，反码加1，01100  10011+1 10100
             int position = availablePosition & (-availablePosition);
+            // 去掉最后一个1
             availablePosition = availablePosition & (availablePosition - 1);
             // 递归皇后个数
             count += solve(n, row + 1, columns | position, (diagonals1 | position) >> 1, (diagonals2 | position) << 1);
