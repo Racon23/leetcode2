@@ -1,5 +1,4 @@
-""aaaabbbbcccc"
-"rat"
-"leetcode"
-"ggggggg"
-"spo""
+[3,6,9,1]
+[10]
+[]
+[10,10]
