@@ -23,52 +23,45 @@ public:
         int n = nums.size();
         if (n <= 1)
             return 0;
-        int ans = 0;
 
-        vector<int> spt(n);
-        int maxnum = *max_element(nums.begin(), nums.end());
-        int d = 0; //计算有多少位
-        while (maxnum > 0)
-        {
-            maxnum /= 10;
-            d++;
-        }
-        vector<int> count(10);
-        int scale = 1;
-        int t;
-        for (int i = 0; i < d; i++)
-        {
-            for (int j = 0; j < 10; j++)
-                count[j] = 0; //每次分配前清空计数器
-
-            for (int j = 0; j < n; j++)
-            {
-                t = (nums[j] / scale) % 10;
-                count[t]++; // 计算个数
-            }
-
-            for (int j = 1; j < 10; j++)
-            {
-                count[j] += count[j - 1]; // 累加得到各个数的位置
-            }
-
-            for (int j = n - 1; j >= 0; j--)
-            {
-                // 倒序填充可结合count数组，按位置填充
-                t = (nums[j] / scale) % 10;
-                spt[count[t]-1] = nums[j];
-                count[t]--;
-            }
-            for(int j=0;j<n;j++){
-                nums[j]=spt[j]; //复制
-            }
-            scale*=10;
-        }
-
+        int maxnum = nums[0], minnum = nums[0];
         for (int i = 1; i < n; i++)
         {
-            ans = max(ans, nums[i] - nums[i - 1]);
+            maxnum = max(nums[i], maxnum);
+            minnum = min(nums[i], minnum);
         }
+
+        int dis = max(1, (maxnum - minnum) / (n - 1)); //桶宽
+        int bucketsize = (maxnum - minnum) / dis + 1;  //桶数，加一时因为要把头占一个桶，尾占一个
+
+        vector<pair<int, int>> bucket(bucketsize, {-1, -1});
+        for (int i = 0; i < n; i++)
+        {
+            int t = (nums[i] - minnum) / dis;
+            if (bucket[t].first == -1)
+            {
+                bucket[t].first = bucket[t].second = nums[i];
+            }
+            else
+            {
+                bucket[t].first = min(bucket[t].first, nums[i]);
+                bucket[t].second = max(bucket[t].second, nums[i]);
+            }
+        }
+
+        int ans = 0;
+        int prev = -1;
+        for (int i = 0; i < bucketsize; i++)
+        {
+            if (bucket[i].first == -1)
+                continue;
+            if (prev != -1)
+            {
+                ans = max(ans, bucket[i].first - bucket[prev].second);
+            }
+            prev = i;
+        }
+
         return ans;
     }
 };
