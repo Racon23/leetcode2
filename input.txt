@@ -1,4 +1,5 @@
-"aab"
+""aab"
 "aaab"
 "aabbcc"
 "aaaaabbbbbccccc"
+"aaaaabbbc""
