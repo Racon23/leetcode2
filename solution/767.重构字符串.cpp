@@ -20,7 +20,8 @@ public:
     string reorganizeString(string S)
     {
         int n = S.size();
-        if(n==2) return S;
+        if (n == 2)
+            return S;
         vector<pair<int, int>> letters(26); // first 字母 second 数量
 
         for (int i = 0; i < 26; i++)
@@ -38,7 +39,7 @@ public:
             return u.second > v.second;
         });
 
-        char cs[n+1];
+        char cs[n + 1];
         cs[n] = '\0';
         if (letters[0].second * 2 - 1 > n)
             return "";
@@ -66,15 +67,8 @@ public:
                 }
             }
         }
-        if (count == n)
-        {
-            string ret = cs;
-            return ret;
-        }
-        else
-        {
-            return "";
-        }
+        string ret = cs;
+        return ret;
     }
 };
 // @lc code=end
