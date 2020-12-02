@@ -20,8 +20,12 @@ class Solution
 public:
     vector<int> maxNumber(vector<int> &nums1, vector<int> &nums2, int k)
     {
-
-        return ret;
+        vector<int> temp;
+        if (k == 0)
+            return temp;
+        vector<int> ans(k, -1);
+        backTrace(nums1, nums2, k, 0, 0, 0, temp, ans);
+        return ans;
     }
 
     void backTrace(vector<int> &nums1, vector<int> &nums2, int k, int i1, int i2, int count, vector<int> &temp, vector<int> &ans)
@@ -34,29 +38,41 @@ public:
             {
                 if (temp[i] < ans[i])
                 {
-                    // 复制过去
                     bGreat = 0;
                     break;
                 }
                 else if (temp[i] > ans[i])
                 {
-                    // 复制过去
                     bGreat = 1;
                     break;
                 }
             }
             if (bGreat == 1)
             {
+                // 复制过去
                 for (int i = 0; i < k; i++)
                 {
                     ans[i] = temp[i];
                 }
             }
-            return ;
-        }else{
-            for(int i=0;i<nums1.size())
+            return;
         }
-
+        else
+        {
+            for (int i = i1; i < nums1.size(); i++)
+            {
+                temp.emplace_back(nums1[i]);
+                backTrace(nums1, nums2, k, i + 1, i2, count + 1, temp, ans);
+                temp.pop_back();
+            }
+            for (int i = i2; i < nums2.size(); i++)
+            {
+                temp.emplace_back(nums2[i]);
+                backTrace(nums1, nums2, k, i1, i + 1, count + 1, temp, ans);
+                temp.pop_back();
+            }
+        }
+        return;
     }
 };
 // @lc code=end
