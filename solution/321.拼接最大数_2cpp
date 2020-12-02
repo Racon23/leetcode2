@@ -1,0 +1,62 @@
+// @before-stub-for-debug-begin
+#include <vector>
+#include <string>
+
+#include "commoncppproblem321.h"
+
+using namespace std;
+// @before-stub-for-debug-end
+
+/*
+ * @lc app=leetcode.cn id=321 lang=cpp
+ *
+ * [321] 拼接最大数
+ */
+
+// @lc code=start
+// 回溯
+class Solution
+{
+public:
+    vector<int> maxNumber(vector<int> &nums1, vector<int> &nums2, int k)
+    {
+
+        return ret;
+    }
+
+    void backTrace(vector<int> &nums1, vector<int> &nums2, int k, int i1, int i2, int count, vector<int> &temp, vector<int> &ans)
+    {
+        if (count == k)
+        {
+            int num = 0;
+            int bGreat = 0;
+            for (int i = 0; i < k; i++)
+            {
+                if (temp[i] < ans[i])
+                {
+                    // 复制过去
+                    bGreat = 0;
+                    break;
+                }
+                else if (temp[i] > ans[i])
+                {
+                    // 复制过去
+                    bGreat = 1;
+                    break;
+                }
+            }
+            if (bGreat == 1)
+            {
+                for (int i = 0; i < k; i++)
+                {
+                    ans[i] = temp[i];
+                }
+            }
+            return ;
+        }else{
+            for(int i=0;i<nums1.size())
+        }
+
+    }
+};
+// @lc code=end
