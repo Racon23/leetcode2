@@ -19,7 +19,7 @@ class Solution
 public:
     int countPrimes(int n)
     {
-        vector<int> primes(n, 0);
+        vector<int> isPrime(n, 1);
         int ans = 0;
         // primes[2] = 1;
         // primes[3] = 1;
@@ -27,12 +27,14 @@ public:
         {
             for (int j = i; i * j < n; j++)
             {
-                primes[i*j] = 1;
+                isPrime[i * j] = 0;
             }
         }
-        
-        for(int i=2;i<n;i++){
-            if(primes[i]==0) ans++;
+
+        for (int i = 2; i < n; i++)
+        {
+            if (isPrime[i] == 1)
+                ans++;
         }
         return ans;
     }
