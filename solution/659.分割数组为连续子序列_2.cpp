@@ -15,35 +15,46 @@ using namespace std;
  */
 
 // @lc code=start
-// 哈希表加最小堆
+// 贪心
 class Solution
 {
 public:
     bool isPossible(vector<int> &nums)
     {
         int len = nums.size();
-        unordered_map<int,priority_queue<int,vector<int>,greater<int>>> mp;
-        for(int &x:nums){
-            if(mp.find(x)==mp.end()){
-                mp[x] = priority_queue<int,vector<int>,greater<int>>();
-            }
-            if(mp.find(x-1)!=mp.end()){
-                int prevLen = mp[x-1].top();
-                mp[x-1].pop();
-                if(mp[x-1].empty()){
-                    mp.erase(x-1);
-                }
-                mp[x].push(prevLen+1);
-            }else{
-                mp[x].push(1);
-            }
-        }
-        for(auto it=mp.begin();it!=mp.end();it++){
-            priority_queue<int,vector<int>,greater<int>> pq = it->second;
-            if(pq.top()<3) return false;
-        }
-        return true;
+        
+        unordered_map<int,int> countMap;
+        unordered_map<int,int> endMap;
 
+        for(auto &x:nums){
+            countMap[x]++;
+        }
+
+        for(auto&x:nums){
+            int count = countMap[x];
+            if(count>0){
+                int prevEndCount = endMap[x-1];
+                if(prevEndCount>0){
+                    endMap[x-1]--;
+                    endMap[x]++;
+                    countMap[x]--;
+                }else{
+                    int count1 = countMap[x+1];
+                    int count2 = countMap[x+2];
+                    if(count1>0&&count2>0){
+                        countMap[x+1]--;
+                        countMap[x+2]--;
+                        countMap[x]--;
+                        endMap[x+2]++;
+                    }else{
+                        return false;
+                    }
+                }
+            }
+        }
+
+
+        return true;
     }
-};W
+};
 // @lc code=end
