@@ -52,11 +52,38 @@ using namespace std;
  */
 
 // @lc code=start
-class Solution {
+class Solution
+{
 public:
-    int wiggleMaxLength(vector<int>& nums) {
+    int wiggleMaxLength(vector<int> &nums)
+    {
+        int n = nums.size();
+        if (n <= 1)
+            return n;
 
+        vector<bool> isDelete(n, false);
+        int prev=0,mid=0;
+        if (nums[0] == nums[1]){
+            isDelete[0]=true;
+            mid = 1;
+        }
+        for (int i = 2; i < n; i++)
+        {
+            // 单调递增
+            if ((nums[i] == nums[mid]) || (nums[i] > nums[mid] && nums[mid] > nums[prev]) || (nums[i] < nums[mid] && nums[mid] < nums[prev]))
+            {
+                isDelete[mid] = true;
+                mid = i;
+            }
+            
+        }
+        int ans = 0;
+        for (int i = 0; i < n; i++)
+        {
+            if (!isDelete[i])
+                ans++;
+        }
+        return ans;
     }
 };
 // @lc code=end
-
