@@ -1,3 +1,14 @@
-10
-1234
-332
+""abba"
+"dog cat cat dog"
+"abba"
+"dog cat cat fish"
+"aaaa"
+"dog cat cat dog"
+"abba"
+"dog dog dog dog"
+"aaaa"
+"dog dog dog cat"
+"aaaaa"
+"dog dog dog cat"
+"aaaa"
+"dog dog dog dog cat""
