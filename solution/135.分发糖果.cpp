@@ -39,7 +39,9 @@ public:
             q.pop();
             if (idx > 0 && ratings[idx] < ratings[idx - 1])
             {
+                if(ratings[idx-1]!=0) ans = ans + cdy[idx]+1 - cdy[idx-1];
                 cdy[idx - 1] = cdy[idx] + 1;
+
                 q.emplace(idx-1);
             }
             if (idx < size - 1 && ratings[idx] < ratings[idx + 1])
