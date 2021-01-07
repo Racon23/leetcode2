@@ -14,6 +14,7 @@ using namespace std;
  */
 
 // @lc code=start
+// 广度优先
 class Solution
 {
 public:
