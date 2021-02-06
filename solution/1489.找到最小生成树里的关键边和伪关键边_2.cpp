@@ -1,7 +1,7 @@
 #include <vector>
 #include <algorithm>
 #include <numeric>
-#include<unordered_map>
+#include <unordered_map>
 using namespace std;
 
 /*
@@ -14,14 +14,13 @@ using namespace std;
 // 并查集 tarjan找桥边
 class UnionFind
 {
-
 public:
     vector<int> parent; // 祖先
-    vector<int> size;   // 该祖先下的点个数
-    int setCount;       // 连通量
-    int n;              //点个数
+    vector<int> rank;   // 权值
+    int setCount;       //连通量
+    int n;              // 点个数
 
-    UnionFind(int _n) : n(_n), setCount(_n), parent(_n), size(_n, 1)
+    UnionFind(int n_) : n(n_), setCount(n_), parent(n_), rank(n_, 1)
     {
         iota(parent.begin(), parent.end(), 0);
     }
@@ -41,13 +40,13 @@ public:
         }
         else
         {
-            if (size[x] < size[y])
+            if (rank[x] < rank[y])
             {
                 swap(x, y);
             }
             parent[y] = x;
-            size[x] += size[y];
-            --setCount;
+            rank[x] += rank[y];
+            setCount--;
             return true;
         }
     }
@@ -61,49 +60,57 @@ public:
 class TarjanSCC
 {
 private:
-    const vector<vector<int>> edges;   // 记录点u拥有的边连接的点
-    const vector<vector<int>> edgesId; // 记录点u拥有的边的id
-    vector<int> low;                   //记录回溯时间点
-    vector<int> dfn;                   //记录遍历时间点
-    vector<int> ans;                   //记录找到的桥边
-    int n;                             // 本次图G的点数
-    int ts;                            // 时间戳
+    vector<vector<int>> edges;   // 点拥有的边连接的点
+    vector<vector<int>> edgesId; // 点拥有的边id
+    vector<int> low;             // 回溯时间戳
+    vector<int> dfn;             // 遍历时间戳
+    vector<int> ans;             // 桥边
+    int n;                       // 点个数
+    int ts;                      // 时间戳
 
-    void getCuttingEdge_(int u, int parentEdgeId)
+    void getCuttingEdges_(int u, int parentEdge)
     {
         low[u] = dfn[u] = ++ts;
-        int usize = edges[u].size();
-        for (int i = 0; i < usize; i++)
+        int size = edges[u].size();
+        for (int i = 0; i < size; i++)
         {
             int v = edges[u][i];
             int id = edgesId[u][i];
-            if (dfn[v] == -1){
-                getCuttingEdge_(v,id);
-                low[u]=min(low[u],low[v]);
-                if(low[u]>dfn[v]){
+            if (dfn[v] == -1)
+            {
+                getCuttingEdges_(v, id);
+                low[u] = min(low[u], low[v]);
+                if (low[v] > dfn[u])
+                {
                     ans.emplace_back(id);
                 }
-            }else if(id!=parentEdgeId){
-                // 回溯时间，比如a->b->c,如果此时有一条ac边，更新low[c]=dfn[a]
-                // 为什么不是low[c]=low[a]。因为low[a]受其他边影响
-                low[u]=min(low[u],dfn[v]);
+            }
+            else if (id != parentEdge)
+            {
+                // 遍历过的点，更新low[u] = dfn[v]
+                // 为什么不是low[u]=low[v]，因为low[v]还受比它排序前的边影响
+                low[u] = min(low[u], dfn[v]);
             }
         }
     }
+
 public:
-    TarjanSCC(int _n, vector<vector<int>> &edges_, vector<vector<int>> &edgesId_) : n(_n), low(_n, -1), dfn(_n, -1), edges(edges_), edgesId(edgesId_), ts(-1)
+    TarjanSCC(int n_, vector<vector<int>> &edges_, vector<vector<int>> &edgesId_)
+        : n(n_), ts(-1), low(n_, -1), dfn(n_, -1), edges(edges_), edgesId(edgesId_)
     {
     }
 
-    vector<int> getCuttingEdge(){
-        for(int i=0;i<n;i++){
-            if(dfn[i]==-1){
-                getCuttingEdge_(i,-1);
+    vector<int> getCuttingEdges()
+    {
+        for (int i = 0; i < n; i++)
+        {
+            if (dfn[i] == -1)
+            {
+                getCuttingEdges_(i, -1);
             }
         }
         return ans;
     }
-
 };
 
 class Solution
@@ -114,52 +121,59 @@ public:
         int m = edges.size();
         for (int i = 0; i < m; i++)
         {
-            edges[i].push_back(i);
+            edges[i].emplace_back(i);
         }
         sort(edges.begin(), edges.end(), [](auto &u, auto &v) {
             return u[2] < v[2];
         });
-        UnionFind uf(n);
-        vector<vector<int>> ans(2, vector<int>());
-        vector<int> label(m, 0); //标记边类型，-1自环边，1桥边，0非桥边
 
-        for(int i=0;i<m;){
-            // 找出权值为w的边，范围[i,j)
+        UnionFind uf(n);
+        vector<int> label(m, 0); // 标记边类型，-1 自环边 0 非关键边 1 关键边
+        vector<vector<int>> ans(2);
+
+        for (int i = 0; i < m;)
+        {
             int w = edges[i][2];
-            int j=i;
-            while(j<m&&edges[j][2]==w){
+            // 找到权重为w的边 [i,j)
+            int j = i;
+            while (j < m && edges[j][2] == w)
+            {
                 j++;
             }
 
-            // 存储每个连通分量在G中的编号
-            unordered_map<int,int> compToId;
-            // 图G点个数
-            int gn=0;
+            unordered_map<int, int> setId; // 记录点所在的连通id
+            int gn = 0;                    // 图g的连通个数
 
-            for(int k=i;k<j;k++){
+            for (int k = i; k < j; k++)
+            {
                 int x = uf.findset(edges[k][0]);
                 int y = uf.findset(edges[k][1]);
-                if(x!=y){
-                    if(!compToId.count(x)){
-                        compToId[x]=gn++;
+                if (x != y)
+                {
+                    if (!setId.count(x))
+                    {
+                        setId[x] = gn++;
                     }
-                    if(!compToId.count(y)){
-                        compToId[y]=gn++;
+                    if (!setId.count(y))
+                    {
+                        setId[y] = gn++;
                     }
-                }else{
-                    // 将自环边标记为-1
-                    label[edges[k][3]]=-1;
+                }
+                else
+                {
+                    // 祖先相同，说明为自环边
+                    label[edges[k][3]] = -1;
                 }
             }
 
-            // 图G的边
-            vector<vector<int>> gm(gn),gmid(gn);
-
-            for(int k=i;k<j;k++){
+            vector<vector<int>> gm(gn), gmid(gn);
+            for (int k = i; k < j; k++)
+            {
                 int x = uf.findset(edges[k][0]);
                 int y = uf.findset(edges[k][1]);
-                if(x!=y){
-                    int idx = compToId[x],idy=compToId[y];
+                if (x != y)
+                {
+                    int idx = setId[x], idy = setId[y];
                     gm[idx].emplace_back(idy);
                     gm[idy].emplace_back(idx);
                     gmid[idx].emplace_back(edges[k][3]);
@@ -167,10 +181,31 @@ public:
                 }
             }
 
-            
+            // 找到的桥边即关键边
+            vector<int> bridges = TarjanSCC(gn, gm, gmid).getCuttingEdges();
+            int bsize = bridges.size();
+            for (int k = 0; k < bsize; k++)
+            {
+                label[bridges[k]] = 1;
+                ans[0].emplace_back(bridges[k]);
+            }
 
+            for (int k = i; k < j; k++)
+            {
+                uf.unite(edges[k][0], edges[k][1]);
+            }
+
+            i = j;
         }
-        
+
+        // 剩余未标记的边为非桥边，即伪关键边
+        for (int i = 0; i < m; i++)
+        {
+            if (!label[i])
+            {
+                ans[1].emplace_back(i);
+            }
+        }
         return ans;
     }
 };
