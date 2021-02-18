@@ -24,6 +24,8 @@
         "bitset": "cpp",
         "regex": "cpp",
         "valarray": "cpp",
-        "numeric": "cpp"
+        "numeric": "cpp",
+        "chrono": "cpp",
+        "random": "cpp"
     }
 }
