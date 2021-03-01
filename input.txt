@@ -1,2 +1,2 @@
-["aaaa","asas","able","ability","actt","actor","access"], 
-["aboveyz","abrodyz","abslute","absoryz","actresz","gaswxyz"]
+["NumArray", "sumRange", "sumRange", "sumRange", "sumRange"]
+[[[-2, 0, 3, -5, 2, -1]], [0, 2], [2, 5], [0, 5],[5,5]]
