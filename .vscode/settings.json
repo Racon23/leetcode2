@@ -26,6 +26,13 @@
         "valarray": "cpp",
         "numeric": "cpp",
         "chrono": "cpp",
-        "random": "cpp"
+        "random": "cpp",
+        "optional": "cpp",
+        "ostream": "cpp",
+        "ratio": "cpp",
+        "system_error": "cpp",
+        "functional": "cpp",
+        "tuple": "cpp",
+        "type_traits": "cpp"
     }
 }
