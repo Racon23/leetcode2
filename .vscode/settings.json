@@ -33,6 +33,7 @@
         "system_error": "cpp",
         "functional": "cpp",
         "tuple": "cpp",
-        "type_traits": "cpp"
+        "type_traits": "cpp",
+        "*.丑数-ii_2cpp": "cpp"
     }
 }
