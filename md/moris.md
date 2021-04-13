@@ -20,10 +20,10 @@ while (p1)
         {
             // p2已经遍历过一次
             p2->right = nullptr;
-            // exe 中
+            // exe p1 中
         }
     }else{
-        // exe 最左节点
+        // exe p1 最左节点 左右
         return;
     }
     p1=p1->right;
@@ -47,7 +47,7 @@ while (p1)
         }
         if (!p2->right)
         {
-            // exe
+            // exe 中
             res.emplace_back(p1->val);
             p2->right = p1;
             p1 = p1->left;
@@ -60,7 +60,7 @@ while (p1)
     }
     else
     {
-        // 最左节点
+        // 最左节点 左右
         //exe
         res.emplace_back(p1->val);
     }
@@ -73,6 +73,7 @@ while (p1)
 
 
 ## 后序
+加入后要翻转来实现
 ```
 while (p1 != nullptr)
 {
@@ -92,7 +93,7 @@ while (p1 != nullptr)
         else
         {
             p2->right = nullptr;
-            // exe
+            // exe 中，加入左子树的单侧右节点后翻转
             addPath(res, p1->left);
         }
     }
@@ -101,4 +102,15 @@ while (p1 != nullptr)
 // 根
 addPath(res, root);
 
+void addPath(vector<int> &vec, TreeNode *node)
+    {
+        int count = 0;
+        while (node != nullptr)
+        {
+            ++count;
+            vec.emplace_back(node->val);
+            node = node->right;
+        }
+        reverse(vec.end() - count, vec.end());
+    }
 ```
